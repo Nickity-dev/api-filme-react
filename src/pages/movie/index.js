@@ -7,22 +7,38 @@ const Movie = () => {
     const { id } = useParams();
     const imagePath = "https://image.tmdb.org/t/p/w500";
 
-    const [movie, setMovie] = useState([]);
+    const [movie, setMovie] = useState(null);
+    const [copied, setCopied] = useState(false);
     const KEY = process.env.REACT_APP_KEY;
+
     useEffect(() => {
-        fetch(
-            `https://api.themoviedb.org/3/movie/popular?api_key=${KEY}&language=pt-BR`
-        )
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${KEY}&language=pt-BR`)
             .then((response) => response.json())
             .then((data) => {
-                const res = data.results;
-                let filme = res.find((key) => {
-                    // eslint-disable-next-line
-                    return key.id == id;
-                });
-                setMovie(filme);
-            }); // eslint-disable-next-line
-    }, []);
+                setMovie(data);
+            });
+    }, [id, KEY]);
+
+    const handleShare = () => {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
+    if (!movie) {
+        return (
+            <div>
+                <nav>
+                    <h1>Movie</h1>
+                </nav>
+                <div className="container">
+                    <h3>Carregando...</h3>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -41,6 +57,11 @@ const Movie = () => {
                     <h4>Descrição: </h4>
                     <p className="movie-desc">{movie.overview}</p>
                 </div>
+
+                <button className="link_button" onClick={handleShare}>
+                    {copied ? "Link copiado! ✅" : "Compartilhar"}
+                </button>
+
                 <Link to="/">
                     <button className="link_button">Voltar</button>
                 </Link>
