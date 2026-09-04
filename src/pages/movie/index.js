@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import "./styles.css";
+import { getComments, addComment, deleteComment } from "../../utils/comments";
+import { getLoggedUser } from "../../utils/auth";
 
 const Movie = () => {
     const { id } = useParams();
@@ -9,6 +10,9 @@ const Movie = () => {
 
     const [movie, setMovie] = useState(null);
     const [copied, setCopied] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
+    const [loggedUser, setLoggedUser] = useState(null);
     const KEY = process.env.REACT_APP_KEY;
 
     useEffect(() => {
@@ -19,12 +23,31 @@ const Movie = () => {
             });
     }, [id, KEY]);
 
+    useEffect(() => {
+        setLoggedUser(getLoggedUser());
+        setComments(getComments(id));
+    }, [id]);
+
     const handleShare = () => {
         const url = window.location.href;
         navigator.clipboard.writeText(url).then(() => {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         });
+    };
+
+    const handleAddComment = (e) => {
+        e.preventDefault();
+        if (newComment.trim() === "") return;
+
+        const updated = addComment(id, loggedUser, newComment);
+        setComments(updated);
+        setNewComment("");
+    };
+
+    const handleDeleteComment = (commentId) => {
+        const updated = deleteComment(id, commentId);
+        setComments(updated);
     };
 
     if (!movie) {
@@ -65,6 +88,51 @@ const Movie = () => {
                 <Link to="/">
                     <button className="link_button">Voltar</button>
                 </Link>
+
+                <div className="comments-section">
+                    <h4>Comentários</h4>
+
+                    {loggedUser ? (
+                        <form className="comment-form" onSubmit={handleAddComment}>
+                            <input
+                                type="text"
+                                className="comment-input"
+                                placeholder="Escreva um comentário..."
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                            />
+                            <button type="submit" className="comment-submit">
+                                Enviar
+                            </button>
+                        </form>
+                    ) : (
+                        <p className="login-warning">
+                            <Link to="/login">Faça login</Link> para comentar este filme.
+                        </p>
+                    )}
+
+                    {comments.length === 0 ? (
+                        <p>Nenhum comentário ainda. Seja o primeiro!</p>
+                    ) : (
+                        comments.map((comment) => (
+                            <div className="comment-item" key={comment.id}>
+                                <div className="comment-header">
+                                    <span className="comment-username">{comment.username}</span>
+                                    <span className="comment-date">{comment.date}</span>
+                                </div>
+                                <p>{comment.text}</p>
+                                {loggedUser === comment.username && (
+                                    <button
+                                        className="comment-delete"
+                                        onClick={() => handleDeleteComment(comment.id)}
+                                    >
+                                        Apagar
+                                    </button>
+                                )}
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     );
