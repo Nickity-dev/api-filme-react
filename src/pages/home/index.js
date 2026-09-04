@@ -11,8 +11,9 @@ import {
     MovieCard,
     FavoriteBtn,
 } from "./style";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getFavorites, toggleFavorite } from "../../utils/favorites";
+import { getLoggedUser, logoutUser } from "../../utils/auth";
 
 function Home() {
     const imagePath = "https://image.tmdb.org/t/p/w500";
@@ -23,19 +24,29 @@ function Home() {
     const [topRated, setTopRated] = useState([]);
     const [search, setSearch] = useState("");
     const [favorites, setFavorites] = useState([]);
+    const [loggedUser, setLoggedUser] = useState(null);
     const KEY = process.env.REACT_APP_KEY;
+    const navigate = useNavigate();
 
-    // Carrega os favoritos salvos ao abrir a página
     useEffect(() => {
-        setFavorites(getFavorites());
+        const user = getLoggedUser();
+        setLoggedUser(user);
+        setFavorites(getFavorites(user));
     }, []);
 
     const handleToggleFavorite = (movie) => {
-        const updated = toggleFavorite(movie);
+        const updated = toggleFavorite(movie, loggedUser);
         setFavorites(updated);
     };
 
     const isFav = (id) => favorites.some((m) => m.id === id);
+
+    const handleLogout = () => {
+        logoutUser();
+        setLoggedUser(null);
+        setFavorites(getFavorites(null));
+        navigate("/");
+    };
 
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${KEY}&language=pt-BR`)
@@ -78,6 +89,17 @@ function Home() {
     return (
         <Container>
             <h1>Movies</h1>
+
+            {loggedUser ? (
+                <p style={{ textAlign: "center" }}>
+                    Olá, <strong>{loggedUser}</strong>!{" "}
+                    <Btn onClick={handleLogout}>Sair</Btn>
+                </p>
+            ) : (
+                <Link to="/login">
+                    <Btn>Entrar / Cadastrar</Btn>
+                </Link>
+            )}
 
             <Link to="/favoritos">
                 <Btn>Meus Favoritos ❤️</Btn>

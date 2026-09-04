@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -12,18 +11,22 @@ import {
     ShareBtn,
 } from "./style";
 import { getFavorites, toggleFavorite } from "../../utils/favorites";
+import { getLoggedUser } from "../../utils/auth";
 
 function Favoritos() {
     const imagePath = "https://image.tmdb.org/t/p/w500";
     const [favorites, setFavorites] = useState([]);
     const [copied, setCopied] = useState(false);
+    const [loggedUser, setLoggedUser] = useState(null);
 
     useEffect(() => {
-        setFavorites(getFavorites());
+        const user = getLoggedUser();
+        setLoggedUser(user);
+        setFavorites(getFavorites(user));
     }, []);
 
     const handleToggleFavorite = (movie) => {
-        const updated = toggleFavorite(movie);
+        const updated = toggleFavorite(movie, loggedUser);
         setFavorites(updated);
     };
 
@@ -39,6 +42,17 @@ function Favoritos() {
     return (
         <Container>
             <h1>Meus Favoritos ❤️</h1>
+
+            {loggedUser ? (
+                <p style={{ textAlign: "center" }}>
+                    Lista de <strong>{loggedUser}</strong>
+                </p>
+            ) : (
+                <p style={{ textAlign: "center" }}>
+                    Você não está logado — esses favoritos são temporários.{" "}
+                    <Link to="/login">Faça login</Link> para salvar sua própria lista.
+                </p>
+            )}
 
             <Link to="/">
                 <Btn>Voltar</Btn>
