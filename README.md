@@ -1,51 +1,39 @@
-# API DE FILMES USANDO REACTJS
+# API de Filmes com React
 
-Por [Diego Candido](https://diegocandido.com)
+Este projeto é uma aplicação web em React para consultar filmes usando a API pública do TMDB. A interface permite buscar filmes, filtrar por gênero, visualizar detalhes, favoritar itens e comentar sobre os filmes.
 
+Desenvolvido por Nikole Maio.
 
-Montei esse projeto bem básico para consumir uma API Rest com lista de filmes.
+GitHub: https://github.com/Nickity-dev
 
+## Sobre o projeto
 
+A aplicação mostra uma lista de filmes populares e permite:
 
-## Site que fornece a API grátis: 
-```
-https://www.themoviedb.org/
-```
+- Buscar filmes por nome
+- Filtrar por categoria/gênero
+- Ver detalhes de cada filme
+- Salvar filmes favoritos
+- Fazer login e comentar nos filmes
 
-## Documentação Oficial do projeto:
-```
-https://www.themoviedb.org/documentation/api
-```
+## Tecnologias utilizadas
 
-Irá ser necessário a geração de uma chave privada nesse link:
-```
-https://www.themoviedb.org/settings/api
-```
+- React
+- React Router
+- Styled Components
+- JavaScript
+- TMDB API
 
-## Token no arquivo .ENV ##
-Para acessar a API Restfull do site é necessário criar um token e colocar em um arquivo .ENV na raíz do projeto. Conforme imagem abaixo:
+## Requisitos
 
-![print](https://user-images.githubusercontent.com/1766790/191596782-51cd52f4-d471-4930-9e33-d792ad4aeeb1.JPG)
+Antes de rodar o projeto, certifique-se de ter instalado:
 
+- Node.js
+- npm
 
-## Clonando o Repositório ##
-Com o Git e o Node.js instalado na sua maquina e a **URL** do projeto em mãos, cria em algum lugar do seu pc uma pasta para criarmos uma copia do repositório, dentro dela abra o **cmd** ou **powershell** e digite os comandos abaixo:
-```
-git clone https://github.com/diegocandido/react-filmes.git
-cd react-filmes
-npm install
-npm start
-```
+## Como rodar
 
-## Tela Inicial do projeto:
+1. Clone o repositório:
 
-![screan](https://user-images.githubusercontent.com/81689363/190420116-177e6087-c1dd-4276-bef1-1dd20e575039.PNG)
-
-
-## Tela de detalhes do filme:
-
-![details](https://user-images.githubusercontent.com/81689363/190419902-82b9ce94-3944-4bdb-ad1c-e35a93b142e1.PNG)
-
-
-
- meu nome É nick
+```bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
