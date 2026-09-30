@@ -2,14 +2,31 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'League Spartan', sans-serif;
+  font-family: "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: black;
-  color: white;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  background:
+    radial-gradient(circle at top, rgba(239, 68, 68, 0.18), transparent 30%),
+    linear-gradient(135deg, #020617 0%, #111827 40%, #0f172a 100%);
+  color: #f8fafc;
+  min-height: 100vh;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button,
+input {
+  font: inherit;
 }
 
 ::-webkit-scrollbar {
